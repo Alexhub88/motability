@@ -1,0 +1,455 @@
+{
+	"info": {
+		"_postman_id": "671be436-e028-43b0-8011-db19030bbf7f",
+		"name": "OLA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15833502",
+		"_collection_link": "https://blue-trinity-83369.postman.co/workspace/Testing~0e27c6e7-5c33-49b2-9844-9ba3aaf2e065/collection/15833502-671be436-e028-43b0-8011-db19030bbf7f?action=share&source=collection_link&creator=15833502"
+	},
+	"item": [
+		{
+			"name": "Initial Application",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//--Validate Response Status Code - should be 200 OK or 201 Resource Created\r",
+							"pm.test(\"Response Status Code should be 200\", function(){\r",
+							"        pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//--Check Response JSON\r",
+							"pm.test(\"Response is a JSON array\", () => {\r",
+							"  const responseJson = pm.response.json();\r",
+							"  pm.expect(responseJson).to.be.an(\"array\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is a valid JSON object\", function () {\r",
+							"  pm.response.to.not.be.error;\r",
+							"  pm.response.to.have.jsonBody('');\r",
+							"  pm.response.to.not.have.jsonBody('error');\r",
+							"});\r",
+							"\r",
+							"// -- Check Schema format of the response if this is known\r",
+							"var apiResponse = pm.response.json();\r",
+							"\r",
+							"schema = {\r",
+							"    \"$schema\": \"https://json-schema.org/draft/2019-09/schema\"\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Schema is valid\", function(){\r",
+							"    var result = tv4.validateResult(apiResponse, schema);\r",
+							"    pm.expect(result.valid).to.be.true;\r",
+							"})\r",
+							"\r",
+							"//Check response time\r",
+							"pm.test(\"Response time is less than 200ms\", () => {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//--Validate Headers--\r",
+							"pm.test(\"Accept header is present in request\", () => {\r",
+							"  pm.request.to.have.header(\"Accept\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Accept header is application/json\", function(){\r",
+							"    pm.expect(pm.request.headers.get(\"Accept\")).to.eql(\"application/json\");\r",
+							"});\r",
+							"\r",
+							"// --Validate the data types in the request body\r",
+							"var req = JSON.parse(request.data);\r",
+							"\r",
+							"pm.test(\"Dealer code is a string\"  , function () {\r",
+							"    pm.expect(req.dealerCode, 'Dealer code is a string').to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Customer first name is a string\", function(){\r",
+							"  pm.expect(req.customer.firstName).to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Customer last name is a string\", function(){\r",
+							"  pm.expect(req.customer.lastName).to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Customer title is a string\", function(){\r",
+							"  pm.expect(req.customer.title).to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Customer date of birth is a date\", function(){\r",
+							"  pm.expect(req.customer.dob).to.match(/^\\d{2}-\\d{2}-\\d{4}\\/\\^\\/\\d{2}-\\d{2}-\\d{4}$/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Customer NINO is a string\", function(){\r",
+							"  pm.expect(req.customer.nino).to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Customer residentialCareHome is a boolean\", function(){\r",
+							"  pm.expect(req.customer.residentialCareHome).to.be.a('boolean');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Customer twentyFourHourCare is a boolean\", function(){\r",
+							"  pm.expect(req.customer.twentyFourHourCare).to.be.a('boolean');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Customer mobilePhoneNumber is a boolean\", function(){\r",
+							"  pm.expect(req.customer.mobilePhoneNumber).to.be.a('boolean');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Customer homePhoneNumber is a string\", function(){\r",
+							"  pm.expect(req.customer.homePhoneNumber).to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Customer email is a string\", function(){\r",
+							"  pm.expect(req.customer.email).to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Customer address line 1 is a string\", function(){\r",
+							"  pm.expect(req.customer.addressLine1).to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Customer address line 2 is a string\", function(){\r",
+							"  pm.expect(req.customer.addressLine1).to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Customer address line 3 is a string\", function(){\r",
+							"  pm.expect(req.customer.addressLine1).to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Customer address line 4 is a string\", function(){\r",
+							"  pm.expect(req.customer.addressLine1).to.be.a('string');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Customer postcode is a string\", function(){\r",
+							"  pm.expect(req.customer.postcode).to.be.a('string');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "averylargestringofrandomlettersandnumbersrepresentingtheauthorisationauthorityfortherequest",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"dealerCode\": \"BEST_DEALER_A1\",\r\n    \"customer\": {\r\n        \"firstName\": \"John\",\r\n        \"lastName\": \"Smith\",\r\n        \"title\": \"Mr\",\r\n        \"dob\": \"1995-10-03\",\r\n        \"nino\": \"JS345436M\",\r\n        \"residentialCareHome\": true,\r\n        \"twentyFourHourCare\": false,\r\n        \"mobilePhoneNumber\": \"07845632521\",\r\n        \"homePhoneNumber\": \"01506674873\",\r\n        \"email\": \"jsmith1995@gmail.com\",\r\n        \"addressLine1\": \"1 Albany Road\",\r\n        \"addressLine2\": \"Bristol\",\r\n        \"addressLine3\": \"\",\r\n        \"addressLine4\": \"\",\r\n        \"postcode\": \"BR46TU\"\r\n    }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{OLA_BASE_URL}}/api/v2/applications",
+					"host": [
+						"{{OLA_BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"applications"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DVLA Driver Eligibility",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//--Validate Response Status Code - should be 200 OK or 201 Resource Created\r",
+							"pm.test(\"Response Status Code should be 200\", function(){\r",
+							"        pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//--Check Response JSON\r",
+							"pm.test(\"Response is a JSON array\", () => {\r",
+							"  const responseJson = pm.response.json();\r",
+							"  pm.expect(responseJson).to.be.an(\"array\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is a valid JSON object\", function () {\r",
+							"  pm.response.to.not.be.error;\r",
+							"  pm.response.to.have.jsonBody('');\r",
+							"  pm.response.to.not.have.jsonBody('error');\r",
+							"});\r",
+							"\r",
+							"// -- Check Schema format of the response if this is known\r",
+							"var apiResponse = pm.response.json();\r",
+							"\r",
+							"schema = {\r",
+							"    \"$schema\": \"https://json-schema.org/draft/2019-09/schema\"\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Schema is valid\", function(){\r",
+							"    var result = tv4.validateResult(apiResponse, schema);\r",
+							"    pm.expect(result.valid).to.be.true;\r",
+							"})\r",
+							"\r",
+							"//Check response time for the API call is within acceptable limits\r",
+							"pm.test(\"Response time is less than 200ms\", () => {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"// DRIVER ELIGIBILITY AND BUSINESS RULES\r",
+							"\r",
+							"//Check first driver meets eligibility requirements\r",
+							"pm.test(\"Driver meets eligibility requirements\", () => {\r",
+							"    if(pm.response.transmissionType == \"MANUAL\") {\r",
+							"        pm.expect(pm.response.drivers[0].licenceTransmission).to.eql(\"MANUAL\");\r",
+							"    };\r",
+							"    pm.expect(pm.response.drivers[0].fullOrProvisional).to.eql(\"FULL\");\r",
+							"    pm.expect(pm.response.drivers[0].isDriverDisqualified).to.eql(false);\r",
+							"    const recentEndorsementsCount = pm.response.drivers[0].endorsements_category_G +_\r",
+							"                                    pm.response.drivers[0].endorsements_category_H +_\r",
+							"                                    pm.response.drivers[0].endorsements_category_I;\r",
+							"    pm.expect(recentEndorsementsCount).to.be.below(5);\r",
+							"    pm.expect(pm.response.drivers[0].endorsements_category_G < 2  || pm.response.drivers[0].latest_conviction_date_G.getFullYear() < currentYear - 4);\r",
+							"    pm.expect(pm.response.drivers[0].endorsements_category_F == 0 || pm.response.drivers[0].latest_conviction_date_F.getFullYear() < currentYear - 4);\r",
+							"});\r",
+							"\r",
+							"//Check second driver meets eligibility requirements\r",
+							"pm.test(\"Driver meets eligibility requirements\", () => {\r",
+							"    if(pm.response.drivers.length > 1) {\r",
+							"        if(pm.response.transmissionType == \"MANUAL\") {\r",
+							"            pm.expect(pm.response.drivers[1].licenceTransmission).to.eql(\"MANUAL\");\r",
+							"        };\r",
+							"        pm.expect(pm.response.drivers[1].fullOrProvisional).to.eql(\"FULL\");\r",
+							"        pm.expect(pm.response.drivers[1].isDriverDisqualified).to.eql(false);\r",
+							"        const recentEndorsementsCount = pm.response.drivers[1].endorsements_category_G +_\r",
+							"                                        pm.response.drivers[1].endorsements_category_H +_\r",
+							"                                        pm.response.drivers[1].endorsements_category_I;\r",
+							"        pm.expect(recentEndorsementsCount).to.be.below(5);\r",
+							"        pm.expect(pm.response.drivers[1].endorsements_category_G < 2  || pm.response.drivers[1].latest_conviction_date_G.getFullYear() < currentYear - 4);\r",
+							"        pm.expect(pm.response.drivers[1].endorsements_category_F == 0 || pm.response.drivers[1].latest_conviction_date_F.getFullYear() < currentYear - 4);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"//Check third driver meets eligibility requirements\r",
+							"pm.test(\"Driver meets eligibility requirements\", () => {\r",
+							"    if(pm.response.drivers.length > 2) {\r",
+							"        if(pm.response.transmissionType == \"MANUAL\") {\r",
+							"            pm.expect(pm.response.drivers[2].licenceTransmission).to.eql(\"MANUAL\");\r",
+							"        };\r",
+							"        pm.expect(pm.response.drivers[2].fullOrProvisional).to.eql(\"FULL\");\r",
+							"        pm.expect(pm.response.drivers[2].isDriverDisqualified).to.eql(false);\r",
+							"        const recentEndorsementsCount = pm.response.drivers[2].endorsements_category_G +_\r",
+							"                                        pm.response.drivers[2].endorsements_category_H +_\r",
+							"                                        pm.response.drivers[2].endorsements_category_I;\r",
+							"        pm.expect(recentEndorsementsCount).to.be.below(5);\r",
+							"        pm.expect(pm.response.drivers[2].endorsements_category_G < 2  || pm.response.drivers[2].latest_conviction_date_G.getFullYear() < currentYear - 4);\r",
+							"        pm.expect(pm.response.drivers[2].endorsements_category_F == 0 || pm.response.drivers[2].latest_conviction_date_F.getFullYear() < currentYear - 4);\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// --Extract data from the request body in order to validate it\r",
+							"var req = JSON.parse(request.data);\r",
+							"\r",
+							"//VALIDATION TESTS ON INPUT DATA AFTER ADDITION OF DRIVER DATA TO INITIAL APPLICATION\r",
+							"\r",
+							"//--Check the number of drivers does not exceed 3\r",
+							"pm.test(\"Number of drivers does not exceed 3\", function () {\r",
+							"    pm.expect(req.drivers.length).to.be.above(0);\r",
+							"    pm.expect(req.drivers.length).to.be.below(4);\r",
+							"});\r",
+							"\r",
+							"//--Get the current date and year\r",
+							"const currentDate = new Date();\r",
+							"\r",
+							"//--Set list of preferred communication methods\r",
+							"const communicationMethods = [\"post\", \"email\", \"phone\"]\r",
+							"\r",
+							"//--Validate the format of the input data for the drivers\r",
+							"pm.test(\"Driver input data meets format specifications\"  , function () {\r",
+							"    for (let i = 0; i < req.drivers.length; i++) {\r",
+							"        pm.expect(req.drivers[i].firstName).to.be.a('string');\r",
+							"        pm.expect(req.drivers[i].lastName).to.be.a('string');\r",
+							"        pm.expect(req.drivers[i].licenceNumbere).to.be.a('string');\r",
+							"        pm.expect(req.drivers[i].licenceStartDate).to.match(/^\\d{2}-\\d{2}-\\d{4}\\/\\^\\/\\d{2}-\\d{2}-\\d{4}$/);\r",
+							"        pm.expect(req.drivers[i].title).to.be.a('string');\r",
+							"        pm.expect(req.drivers[i].dob).to.match(/^\\d{2}-\\d{2}-\\d{4}\\/\\^\\/\\d{2}-\\d{2}-\\d{4}$/);\r",
+							"        pm.expect(req.drivers[i].nino).to.be.a('string');\r",
+							"        pm.expect(req.drivers[i].mobilePhoneNumber).to.be.a('string');\r",
+							"        pm.expect(req.drivers[i].homePhoneNumber).to.be.a('string');\r",
+							"        pm.expect(req.drivers[i].email).to.be.a('string');\r",
+							"        pm.expect(req.drivers[i].addressLine1).to.be.a('string');\r",
+							"        pm.expect(req.drivers[i].addressLine2).to.be.a('string');\r",
+							"        pm.expect(req.drivers[i].addressLine3).to.be.a('string');\r",
+							"        pm.expect(req.drivers[i].addressLine4).to.be.a('string');\r",
+							"        pm.expect(req.drivers[i].postcode).to.be.a('string');\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"//--Validate the format of the input data for the vehicle adaptations\r",
+							"pm.test(\"Vehicle adaptations data meets format specifications\"  , function () {\r",
+							"        pm.expect(req.vehicleAdaptations[0]).to.be.a('boolean');\r",
+							"        pm.expect(req.vehicleAdaptations[1]).to.be.a('boolean');\r",
+							"});\r",
+							"\r",
+							"//--Check that the estimated delivery date field is of date format\r",
+							"pm.test(\"Estimated delivery date field meets format specifications\"  , function () {\r",
+							"        pm.expect(req.estimatedDeliveryDate).to.match(/^\\d{2}-\\d{2}-\\d{4}\\/\\^\\/\\d{2}-\\d{2}-\\d{4}$/);\r",
+							"});\r",
+							"\r",
+							"//--Check that the estimated delivery date is within (for example) 2 weeks of the current date\r",
+							"pm.test(\"Estimated delivery date field meets format specifications\"  , function () {\r",
+							"        pm.expect(req.estimatedDeliveryDate.to.be.below(currentDate + 14));\r",
+							"});\r",
+							"\r",
+							"//--Check that the preferred communication method is taken from the list of preferred methods\r",
+							"pm.test(\"Preferred communication method is taken from a specified list\"  , function () {\r",
+							"        pm.expect(communicationMethods.includes(req.preferredCommunicationMethod));\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "averylargestringofrandomlettersandnumbersrepresentingtheauthorisationauthorityfortherequest",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"dealerCode\": \"BEST_DEALER_A1\",\r\n    \"customer\": {\r\n        \"firstName\": \"John\",\r\n        \"lastName\": \"Smith\",\r\n        \"title\": \"Mr\",\r\n        \"dob\": \"1995-10-03\",\r\n        \"nino\": \"JS345436M\",\r\n        \"residentialCareHome\": true,\r\n        \"twentyFourHourCare\": false,\r\n        \"mobilePhoneNumber\": \"07845632521\",\r\n        \"homePhoneNumber\": \"01506674873\",\r\n        \"email\": \"jsmith1995@gmail.com\",\r\n        \"addressLine1\": \"1 Albany Road\",\r\n        \"addressLine2\": \"Bristol\",\r\n        \"addressLine3\": \"\",\r\n        \"addressLine4\": \"\",\r\n        \"postcode\": \"BR46TU\"\r\n    },\r\n    \"customerAcceptedDWPConsent\": true,\r\n    \"drivers\": [\r\n        {\r\n            \"firstName\": \"Jennifer\",\r\n            \"lastName\": \"Jones\",\r\n            \"licenceNumber\": \"47639821\",\r\n            \"licenceStartDate\": \"2015-03-02\",\r\n            \"title\": \"Ms\",\r\n            \"dob\": \"1990-09-22\",\r\n            \"nino\": \"JW834716L\",\r\n            \"mobilePhoneNumber\": \"07845632522\",\r\n            \"homePhoneNumber\": \"01506674874\",\r\n            \"email\": \"jjones1990@gmail.com\",\r\n            \"addressLine1\": \"23 Green Lane\",\r\n            \"addressLine2\": \"Bristol\",\r\n            \"addressLine3\": \"\",\r\n            \"addressLine4\": \"\",\r\n            \"postcode\": \"BR35GH\"\r\n        },\r\n        {\r\n            \"firstName\": \"Philip\",\r\n            \"lastName\": \"Foster\",\r\n            \"licenceNumber\": \"47639822\",\r\n            \"licenceStartDate\": \"2015-03-10\",\r\n            \"title\": \"Mr\",\r\n            \"dob\": \"1991-04-12\",\r\n            \"nino\": \"JW834716Q\",\r\n            \"mobilePhoneNumber\": \"07845632524\",\r\n            \"homePhoneNumber\": \"01506674875\",\r\n            \"email\": \"pfoster1991@gmail.com\",\r\n            \"addressLine1\": \"24 Green Road\",\r\n            \"addressLine2\": \"Bristol\",\r\n            \"addressLine3\": \"\",\r\n            \"addressLine4\": \"\",\r\n            \"postcode\": \"BR25FR\"\r\n        },\r\n        {\r\n            \"firstName\": \"Bill\",\r\n            \"lastName\": \"Hawkins\",\r\n            \"licenceNumber\": \"47639827\",\r\n            \"licenceStartDate\": \"2015-02-05\",\r\n            \"title\": \"Mr\",\r\n            \"dob\": \"1992-03-06\",\r\n            \"nino\": \"JW834716Q\",\r\n            \"mobilePhoneNumber\": \"07845632528\",\r\n            \"homePhoneNumber\": \"01506674879\",\r\n            \"email\": \"bhawkins1992@gmail.com\",\r\n            \"addressLine1\": \"11 Tower Hamlets\",\r\n            \"addressLine2\": \"Bristol\",\r\n            \"addressLine3\": \"\",\r\n            \"addressLine4\": \"\",\r\n            \"postcode\": \"BR53KE\"\r\n        }\r\n    ],\r\n    \"vehicleAdaptations\": [\r\n        {\r\n            \"handControls\": true\r\n        },\r\n        {\r\n            \"wheelChairHoists\": false\r\n        }\r\n    ],\r\n    \"preferredCommunicationMethod\": \"email\",\r\n    \"estimatedDeliveryDate\": \"2025-05-30\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{OLA_BASE_URL}}/api/v2/dvla_driver_eligibility",
+					"host": [
+						"{{OLA_BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"dvla_driver_eligibility"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Driver Eligibility API Response",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "averylargestringofrandomlettersandnumbersrepresentingtheauthorisationauthorityfortherequest",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"dealerCode\": \"BEST_DEALER_A1\",\r\n    \"customer\": {\r\n        \"firstName\": \"John\",\r\n        \"lastName\": \"Smith\",\r\n        \"title\": \"Mr\",\r\n        \"dob\": \"1995-10-03\",\r\n        \"nino\": \"JS345436M\",\r\n        \"residentialCareHome\": true,\r\n        \"twentyFourHourCare\": false,\r\n        \"mobilePhoneNumber\": \"07845632521\",\r\n        \"homePhoneNumber\": \"01506674873\",\r\n        \"email\": \"jsmith1995@gmail.com\",\r\n        \"addressLine1\": \"1 Albany Road\",\r\n        \"addressLine2\": \"Bristol\",\r\n        \"addressLine3\": \"\",\r\n        \"addressLine4\": \"\",\r\n        \"postcode\": \"BR46TU\"\r\n    },\r\n    \"customerAcceptedDWPConsent\": true,\r\n    \"transmissionType\": \"MANUAL\",\r\n    \"drivers\": [\r\n        {\r\n            \"firstName\": \"Jennifer\",\r\n            \"lastName\": \"Jones\",\r\n            \"licenceNumber\": \"47639821\",\r\n            \"licenceStartDate\": \"2015-03-02\",\r\n            \"title\": \"Ms\",\r\n            \"dob\": \"1990-09-22\",\r\n            \"nino\": \"JW834716L\",\r\n            \"mobilePhoneNumber\": \"07845632522\",\r\n            \"homePhoneNumber\": \"01506674874\",\r\n            \"email\": \"jjones1990@gmail.com\",\r\n            \"addressLine1\": \"23 Green Lane\",\r\n            \"addressLine2\": \"Bristol\",\r\n            \"addressLine3\": \"\",\r\n            \"addressLine4\": \"\",\r\n            \"postcode\": \"BR35GH\",\r\n            \"licenceTransmission\": \"MANUAL\",\r\n            \"fullOrProvisional\": \"FULL\",\r\n            \"licenceEntitlement\": \"FULL\",\r\n            \"isDriverDisqualified\": false,\r\n            \"endorsements_category_F\": 1,\r\n            \"latest_conviction_date_F\": \"2015-08-22\",\r\n            \"endorsements_category_G\": 1,\r\n            \"latest_conviction_date_G\": \"2017-09-22\",\r\n            \"endorsements_category_H\": 0,\r\n            \"latest_conviction_date_H\": \"\",\r\n            \"endorsements_category_I\": 1,\r\n            \"latest_conviction_date_I\": \"2016-09-22\"\r\n        },\r\n        {\r\n            \"firstName\": \"Philip\",\r\n            \"lastName\": \"Foster\",\r\n            \"licenceNumber\": \"47639822\",\r\n            \"licenceStartDate\": \"2015-03-10\",\r\n            \"title\": \"Mr\",\r\n            \"dob\": \"1991-04-12\",\r\n            \"nino\": \"JW834716Q\",\r\n            \"mobilePhoneNumber\": \"07845632524\",\r\n            \"homePhoneNumber\": \"01506674875\",\r\n            \"email\": \"pfoster1991@gmail.com\",\r\n            \"addressLine1\": \"24 Green Road\",\r\n            \"addressLine2\": \"Bristol\",\r\n            \"addressLine3\": \"\",\r\n            \"addressLine4\": \"\",\r\n            \"postcode\": \"BR25FR\",\r\n            \"licenceTransmission\": \"AUTOMATIC\",\r\n            \"fullOrProvisional\": \"PROVISIONAL\",\r\n            \"isDriverDisqualified\": false,\r\n            \"endorsements_category_F\": 1,\r\n            \"latest_conviction_date_F\": \"2016-08-22\",\r\n            \"endorsements_category_G\": 0,\r\n            \"latest_conviction_date_G\": \"\",\r\n            \"endorsements_category_H\": 0,\r\n            \"latest_conviction_date_H\": \"\",\r\n            \"endorsements_category_I\": 1,\r\n            \"latest_conviction_date_I\": \"2016-09-22\"\r\n        },\r\n        {\r\n            \"firstName\": \"Bill\",\r\n            \"lastName\": \"Hawkins\",\r\n            \"licenceNumber\": \"47639827\",\r\n            \"licenceStartDate\": \"2015-02-05\",\r\n            \"title\": \"Mr\",\r\n            \"dob\": \"1992-03-06\",\r\n            \"nino\": \"JW834716Q\",\r\n            \"mobilePhoneNumber\": \"07845632528\",\r\n            \"homePhoneNumber\": \"01506674879\",\r\n            \"email\": \"bhawkins1992@gmail.com\",\r\n            \"addressLine1\": \"11 Tower Hamlets\",\r\n            \"addressLine2\": \"Bristol\",\r\n            \"addressLine3\": \"\",\r\n            \"addressLine4\": \"\",\r\n            \"postcode\": \"BR53KE\",\r\n            \"licenceTransmission\": \"AUTOMATIC\",\r\n            \"fullOrProvisional\": \"FULL\",\r\n            \"isDriverDisqualified\": false,\r\n            \"endorsements_category_F\": 1,\r\n            \"latest_conviction_date_F\": \"2019-09-23\",\r\n            \"endorsements_category_G\": 0,\r\n            \"latest_conviction_date_G\": \"\",\r\n            \"endorsements_category_H\": 0,\r\n            \"latest_conviction_date_H\": \"\",\r\n            \"endorsements_category_I\": 0,\r\n            \"latest_conviction_date_I\": \"\"\r\n        }\r\n    ],\r\n    \"vehicleAdaptations\": [\r\n        {\r\n            \"handControls\": true\r\n        },\r\n        {\r\n            \"wheelChairHoists\": false\r\n        }\r\n    ],\r\n    \"estimatedDeliveryDate\": \"2025-05-30\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{OLA_BASE_URL}}/api/v2/dvla",
+					"host": [
+						"{{OLA_BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"dvla"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
